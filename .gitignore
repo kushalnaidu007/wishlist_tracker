@@ -39,3 +39,11 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# editors
+.vscode/
+.idea/
+
+# Claude Code local state — accumulated permission allowlist and
+# session-local lock files, not shared project configuration.
+.claude/

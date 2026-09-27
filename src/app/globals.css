@@ -1,26 +1,195 @@
 @import "tailwindcss";
+@import "tw-animate-css";
+@import "shadcn/tailwind.css";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --font-sans: var(--font-sans);
   --font-mono: var(--font-geist-mono);
+  --font-heading: var(--font-display);
+  --color-affordable: var(--affordable);
+  --color-affordable-foreground: var(--affordable-foreground);
+  --color-deferred: var(--deferred);
+  --color-deferred-foreground: var(--deferred-foreground);
+  --color-cat-indigo: var(--cat-indigo);
+  --color-cat-indigo-foreground: var(--cat-indigo-foreground);
+  --color-cat-sage: var(--cat-sage);
+  --color-cat-sage-foreground: var(--cat-sage-foreground);
+  --color-cat-clay: var(--cat-clay);
+  --color-cat-clay-foreground: var(--cat-clay-foreground);
+  --color-cat-gold: var(--cat-gold);
+  --color-cat-gold-foreground: var(--cat-gold-foreground);
+  --color-cat-blue: var(--cat-blue);
+  --color-cat-blue-foreground: var(--cat-blue-foreground);
+  --color-cat-mauve: var(--cat-mauve);
+  --color-cat-mauve-foreground: var(--cat-mauve-foreground);
+  --color-sidebar-ring: var(--sidebar-ring);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar: var(--sidebar);
+  --color-chart-5: var(--chart-5);
+  --color-chart-4: var(--chart-4);
+  --color-chart-3: var(--chart-3);
+  --color-chart-2: var(--chart-2);
+  --color-chart-1: var(--chart-1);
+  --color-ring: var(--ring);
+  --color-input: var(--input);
+  --color-border: var(--border);
+  --color-destructive: var(--destructive);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-accent: var(--accent);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-muted: var(--muted);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-secondary: var(--secondary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-primary: var(--primary);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-popover: var(--popover);
+  --color-card-foreground: var(--card-foreground);
+  --color-card: var(--card);
+  --radius-sm: calc(var(--radius) * 0.6);
+  --radius-md: calc(var(--radius) * 0.8);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) * 1.4);
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+:root {
+  /* Porcelain + indigo, with a muted multi-hue set for item category badges */
+  --background: #f2efe9;
+  --foreground: #1c2130;
+  --card: #fbfaf7;
+  --card-foreground: #1c2130;
+  --popover: #fbfaf7;
+  --popover-foreground: #1c2130;
+  --primary: #3b3f8c;
+  --primary-foreground: #fbfaf7;
+  --secondary: #e7e3d9;
+  --secondary-foreground: #1c2130;
+  --muted: #e7e3d9;
+  --muted-foreground: #6b6759;
+  --accent: #dad4c2;
+  --accent-foreground: #1c2130;
+  --destructive: #b23b2e;
+  --border: #dfdacd;
+  --input: #dfdacd;
+  --ring: #3b3f8c;
+  --affordable: #b4862b;
+  --affordable-foreground: #1c2130;
+  --deferred: #dfdacd;
+  --deferred-foreground: #8a8672;
+  --cat-indigo: #e3e4f5;
+  --cat-indigo-foreground: #3b3f8c;
+  --cat-sage: #e4ebdd;
+  --cat-sage-foreground: #5b7a4e;
+  --cat-clay: #f3e1d6;
+  --cat-clay-foreground: #b25c3e;
+  --cat-gold: #f5ead1;
+  --cat-gold-foreground: #a87c1f;
+  --cat-blue: #dee7ef;
+  --cat-blue-foreground: #4c6c8a;
+  --cat-mauve: #efe1e9;
+  --cat-mauve-foreground: #8a5670;
+  --chart-1: #3b3f8c;
+  --chart-2: #b4862b;
+  --chart-3: #b23b2e;
+  --chart-4: #6b6759;
+  --chart-5: #1c2130;
+  --radius: 0.55rem;
+  --sidebar: #e7e3d9;
+  --sidebar-foreground: #1c2130;
+  --sidebar-primary: #3b3f8c;
+  --sidebar-primary-foreground: #fbfaf7;
+  --sidebar-accent: #dad4c2;
+  --sidebar-accent-foreground: #1c2130;
+  --sidebar-border: #dfdacd;
+  --sidebar-ring: #3b3f8c;
+}
+
+.dark {
+  --background: #14161f;
+  --foreground: #edeae1;
+  --card: #1b1e2b;
+  --card-foreground: #edeae1;
+  --popover: #1b1e2b;
+  --popover-foreground: #edeae1;
+  --primary: #8286d6;
+  --primary-foreground: #14161f;
+  --secondary: #232637;
+  --secondary-foreground: #edeae1;
+  --muted: #232637;
+  --muted-foreground: #9a96a6;
+  --accent: #2c2440;
+  --accent-foreground: #edeae1;
+  --destructive: #e2685a;
+  --border: oklch(1 0 0 / 12%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: #8286d6;
+  --affordable: #d4ab55;
+  --affordable-foreground: #14161f;
+  --deferred: #2c2e40;
+  --deferred-foreground: #9a96a6;
+  --cat-indigo: #2a2c52;
+  --cat-indigo-foreground: #a6a9ee;
+  --cat-sage: #263524;
+  --cat-sage-foreground: #9bc189;
+  --cat-clay: #3a2a22;
+  --cat-clay-foreground: #e29a78;
+  --cat-gold: #3a2f16;
+  --cat-gold-foreground: #e0b85f;
+  --cat-blue: #202e3b;
+  --cat-blue-foreground: #8fb4d6;
+  --cat-mauve: #33202b;
+  --cat-mauve-foreground: #d592b3;
+  --chart-1: #8286d6;
+  --chart-2: #d4ab55;
+  --chart-3: #e2685a;
+  --chart-4: #9a96a6;
+  --chart-5: #edeae1;
+  --sidebar: #1b1e2b;
+  --sidebar-foreground: #edeae1;
+  --sidebar-primary: #8286d6;
+  --sidebar-primary-foreground: #14161f;
+  --sidebar-accent: #2c2440;
+  --sidebar-accent-foreground: #edeae1;
+  --sidebar-border: oklch(1 0 0 / 12%);
+  --sidebar-ring: #8286d6;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+  html {
+    @apply font-sans;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  .font-tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  .perforation {
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--border) 0,
+      var(--border) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+    height: 1px;
+  }
 }
