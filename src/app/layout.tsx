@@ -21,7 +21,7 @@ const jetbrainsMono = JetBrains_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Wishpri — group wishlist",
+  title: "Wishpri — wishlist & affordability tracker",
   description:
     "Track what you want to buy against your real monthly balance.",
 };

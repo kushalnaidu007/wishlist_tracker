@@ -20,7 +20,7 @@ export default function PrivacyPage() {
           Legal
         </p>
         <h1 className="mt-1 font-heading text-3xl tracking-tight">Privacy Policy</h1>
-        <p className="mt-2 text-sm text-muted-foreground">Last updated September 26, 2026.</p>
+        <p className="mt-2 text-sm text-muted-foreground">Last updated September 27, 2026.</p>
 
         <div className="mt-10 space-y-8 text-sm leading-relaxed text-foreground">
           <section>
@@ -105,13 +105,7 @@ export default function PrivacyPage() {
             <h2 className="font-heading text-lg tracking-tight">Data retention &amp; deletion</h2>
             <p className="mt-2 text-muted-foreground">
               Your data stays in the app for as long as your account exists.
-              There&apos;s currently no self-serve way to delete your account —
-              email us at{" "}
-              <a href="mailto:hello@wishpri.com" className="text-foreground underline underline-offset-2">
-                hello@wishpri.com
-              </a>{" "}
-              to request deletion, and we&apos;ll remove your account and its
-              associated data.
+              To delete your account and all associated data, go to the profile and click &quot;Delete account&quot;. This is permanent and cannot be undone.
             </p>
           </section>
 

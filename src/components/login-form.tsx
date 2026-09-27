@@ -21,7 +21,7 @@ export function LoginForm({ next }: { next: string }) {
     >
       <div className="mb-8 text-center">
         <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
-          Group wishlist
+          Itemized &middot; Prioritized &middot; Pooled
         </p>
         <h1 className="mt-2 font-sans text-4xl font-bold tracking-tight text-foreground">
           Wishpri
