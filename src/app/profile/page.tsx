@@ -4,6 +4,7 @@ import { SiteHeader } from "@/components/site-header";
 import { SetupNotice } from "@/components/setup-notice";
 import { CurrencyForm } from "@/components/profile/currency-form";
 import { DisplayNameForm } from "@/components/profile/display-name-form";
+import { ChangePasswordDialog } from "@/components/profile/change-password-dialog";
 import { FeedbackDialog } from "@/components/profile/feedback-dialog";
 import { DeleteAccountDialog } from "@/components/profile/delete-account-dialog";
 import { UserAvatar } from "@/components/profile/user-avatar";
@@ -46,6 +47,17 @@ export default async function ProfilePage() {
         </div>
         <DisplayNameForm currentDisplayName={displayName} />
         <CurrencyForm currentCurrency={getUserCurrency(user)} />
+        <div className="flex items-center justify-between rounded-md border border-border bg-card p-5">
+          <div>
+            <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">
+              Password
+            </p>
+            <p className="mt-1 text-sm text-muted-foreground">
+              Change your password — you&apos;ll need your current one.
+            </p>
+          </div>
+          <ChangePasswordDialog />
+        </div>
         <div className="flex items-center justify-between rounded-md border border-border bg-card p-5">
           <div>
             <p className="font-mono text-xs uppercase tracking-[0.2em] text-muted-foreground">

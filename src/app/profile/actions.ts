@@ -77,3 +77,39 @@ export async function deleteAccount(formData: FormData) {
   await supabase.auth.signOut();
   redirect("/");
 }
+
+export async function changePassword(formData: FormData) {
+  const currentPassword = String(formData.get("currentPassword") ?? "");
+  const newPassword = String(formData.get("newPassword") ?? "");
+  const confirmPassword = String(formData.get("confirmPassword") ?? "");
+
+  if (!currentPassword) {
+    return { error: "Enter your current password." };
+  }
+  if (newPassword.length < 6) {
+    return { error: "New password must be at least 6 characters." };
+  }
+  if (newPassword !== confirmPassword) {
+    return { error: "New passwords don't match." };
+  }
+
+  const { supabase, user } = await requireUser();
+  if (!user.email) {
+    return { error: "Your account has no email on file." };
+  }
+
+  // Same re-authentication shape as deleteAccount — verify the current
+  // password before changing anything.
+  const { error: reauthError } = await supabase.auth.signInWithPassword({
+    email: user.email,
+    password: currentPassword,
+  });
+  if (reauthError) {
+    return { error: "Incorrect current password." };
+  }
+
+  const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });
+  if (updateError) return { error: updateError.message };
+
+  return { error: null };
+}

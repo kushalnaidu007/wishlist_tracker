@@ -70,9 +70,17 @@ function SignInForm({ next }: { next: string }) {
         />
       </div>
       <div className="space-y-1.5">
-        <Label htmlFor="signin-password" className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
-          Password
-        </Label>
+        <div className="flex items-center justify-between">
+          <Label htmlFor="signin-password" className="font-mono text-xs uppercase tracking-wide text-muted-foreground">
+            Password
+          </Label>
+          <Link
+            href="/forgot-password"
+            className="text-xs text-muted-foreground underline underline-offset-2 hover:text-foreground"
+          >
+            Forgot password?
+          </Link>
+        </div>
         <Input
           id="signin-password"
           name="password"
