@@ -5,6 +5,20 @@ import { requireUser } from "@/app/actions";
 import { getGroupMembers, getUserGroups } from "@/lib/data";
 import { createAdminClient } from "@/lib/supabase/admin";
 
+/**
+ * Shared by deleteAccount and changePassword — both need the same
+ * security control (confirm the current password before a sensitive
+ * account change) and must stay in sync, not just look similar.
+ */
+async function verifyCurrentPassword(
+  supabase: Awaited<ReturnType<typeof requireUser>>["supabase"],
+  email: string,
+  password: string
+): Promise<string | null> {
+  const { error } = await supabase.auth.signInWithPassword({ email, password });
+  return error ? "Incorrect password." : null;
+}
+
 export async function deleteAccount(formData: FormData) {
   const password = String(formData.get("password") ?? "");
   if (!password) {
@@ -18,12 +32,9 @@ export async function deleteAccount(formData: FormData) {
 
   // Re-authenticate before doing anything destructive — same mechanism
   // signIn() already uses, not a new auth pattern.
-  const { error: reauthError } = await supabase.auth.signInWithPassword({
-    email: user.email,
-    password,
-  });
+  const reauthError = await verifyCurrentPassword(supabase, user.email, password);
   if (reauthError) {
-    return { error: "Incorrect password." };
+    return { error: reauthError };
   }
 
   // Clean up group memberships first — same owner-promotion decision
@@ -100,12 +111,9 @@ export async function changePassword(formData: FormData) {
 
   // Same re-authentication shape as deleteAccount — verify the current
   // password before changing anything.
-  const { error: reauthError } = await supabase.auth.signInWithPassword({
-    email: user.email,
-    password: currentPassword,
-  });
+  const reauthError = await verifyCurrentPassword(supabase, user.email, currentPassword);
   if (reauthError) {
-    return { error: "Incorrect current password." };
+    return { error: reauthError };
   }
 
   const { error: updateError } = await supabase.auth.updateUser({ password: newPassword });

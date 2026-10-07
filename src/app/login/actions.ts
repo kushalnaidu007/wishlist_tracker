@@ -1,7 +1,10 @@
 "use server";
 
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+import { RECOVERY_COOKIE } from "@/app/auth/callback/route";
 import { createClient } from "@/lib/supabase/server";
+import { siteUrl } from "@/lib/supabase/env";
 
 export interface AuthFormState {
   status: "idle" | "sent" | "error";
@@ -53,8 +56,6 @@ export async function signUp(
     return { status: "error", message: "Supabase isn't configured yet." };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
   const { data, error } = await supabase.auth.signUp({
     email,
     password,
@@ -92,15 +93,23 @@ export async function requestPasswordReset(
     return { status: "error", message: "Supabase isn't configured yet." };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "http://localhost:3000";
-
-  await supabase.auth.resetPasswordForEmail(email, {
+  const { error } = await supabase.auth.resetPasswordForEmail(email, {
     redirectTo: `${siteUrl}/auth/callback?next=${encodeURIComponent("/reset-password")}`,
   });
 
-  // Same message regardless of whether the email is actually registered —
-  // Supabase itself doesn't error on an unknown email either, for the
-  // same reason: don't let this form reveal who has an account here.
+  // Supabase doesn't error for an unregistered email — it already handles
+  // that silently, by design, for the same anti-enumeration reason as the
+  // generic message below. A real error here means something actually
+  // went wrong (rate limit, network, config) — safe to surface honestly
+  // without reintroducing that leak, since it's unrelated to whether the
+  // email exists.
+  if (error) {
+    return {
+      status: "error",
+      message: "Something went wrong sending the reset link. Try again in a few minutes.",
+    };
+  }
+
   return {
     status: "sent",
     message: "If an account exists for that email, we've sent a password reset link.",
@@ -117,6 +126,19 @@ export async function resetPassword(
     return { status: "error", message: "Password must be at least 6 characters." };
   }
 
+  // A session alone isn't enough — must specifically have just come
+  // through the recovery-link exchange (see /auth/callback), not any
+  // other signed-in session (e.g. a hijacked cookie from elsewhere in
+  // the app). This is the same check the page itself makes; repeated
+  // here since this action is the actual mutation point.
+  const cookieStore = await cookies();
+  if (!cookieStore.get(RECOVERY_COOKIE)) {
+    return {
+      status: "error",
+      message: "This reset link has expired or was already used. Request a new one.",
+    };
+  }
+
   const supabase = await createClient();
   if (!supabase) {
     return { status: "error", message: "Supabase isn't configured yet." };
@@ -130,5 +152,8 @@ export async function resetPassword(
     return { status: "error", message: error.message };
   }
 
+  // Single-use — consume it so the same recovery session can't set
+  // another password later.
+  cookieStore.delete(RECOVERY_COOKIE);
   redirect("/");
 }
